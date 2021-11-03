@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'Authenticated', 'status' => 200], 200);
     });
+
+    Route::post('add-product', [ProductController::class, 'add']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
