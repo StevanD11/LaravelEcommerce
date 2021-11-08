@@ -135,4 +135,10 @@ class ProductController extends Controller
             ]);
         }
     }
+
+
+    public function search($key)
+    {
+        return Product::where('name', 'like', "%$key%")->get();
+    }
 }
