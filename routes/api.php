@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::get('view-products', [ProductController::class, 'getAll']);
-
+Route::get('search/{key}', [ProductController::class, 'search']);
 Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'Authenticated', 'status' => 200], 200);
