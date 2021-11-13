@@ -23,7 +23,7 @@ class RegisterController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation error',
+                'message' => 'Registration error',
                 'validation_errors' => $validator->errors()
             ]);
         } else {

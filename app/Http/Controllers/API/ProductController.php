@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Product;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -21,7 +22,7 @@ class ProductController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation error',
+                'message' => 'Saving product error!',
                 'validation_errors' => $validator->errors()
             ]);
         } else {
@@ -84,7 +85,7 @@ class ProductController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation error',
+                'message' => 'Updating product error!',
                 'validation_errors' => $validator->errors()
             ]);
         } else {
@@ -139,6 +140,18 @@ class ProductController extends Controller
 
     public function search($key)
     {
-        return Product::where('name', 'like', "%$key%")->get();
+        $products = Product::where('name', 'like', "%$key%")->get();
+
+        if (count($products) >= 1) {
+            return response()->json([
+                'status' => 200,
+                'products' => $products
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'There are no products with that name!'
+            ]);
+        }
     }
 }
