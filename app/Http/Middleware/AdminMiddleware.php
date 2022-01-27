@@ -24,13 +24,13 @@ class AdminMiddleware
             } else {
                 return response()->json([
                     'status' => 403,
-                    'message' => 'You need to be admin to access this page!'
+                    'message' => 'Samo Admin ima pristup ovoj stranici!'
                 ], 403);
             }
         } else {
             return response()->json([
                 'status' => 404,
-                'message' => 'You need to be logged in!'
+                'message' => 'Morate biti ulogovani da biste pristupili ovoj stranici!'
             ]);
         }
     }

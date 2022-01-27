@@ -16,18 +16,15 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|unique:users,email|email',
-            'password' => 'required'
+            'email' => 'required|unique:users,email|email'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Registration error',
-                'validation_errors' => $validator->errors()
+                'status' => 404,
+                'message' => $validator->errors()
             ]);
         } else {
-
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -37,7 +34,7 @@ class RegisterController extends Controller
             return response()->json([
                 'status' => 200,
                 'username' => $user->name,
-                'message' => 'Registered successfully!'
+                'message' => 'Uspešno ste se registrovali!'
             ]);
         }
     }
@@ -52,8 +49,8 @@ class RegisterController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation error',
-                'validation_errors' => $validator->errors()
+                'status' => 404,
+                'message' => $validator->errors()
             ]);
         } else {
             $user = User::where('email', $request->email)->first();
@@ -61,7 +58,7 @@ class RegisterController extends Controller
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return response()->json([
                     'status' => 401,
-                    'message' => 'Wrong email or password!'
+                    'message' => 'Pogrešan email ili lozinka! Pokušajte ponovo!'
                 ]);
             } else {
 
@@ -69,7 +66,7 @@ class RegisterController extends Controller
                     $role = 'admin';
                     $token = $user->createToken($user->email . '_AdminAuthTkn', ['server:admin'])->plainTextToken;
                 } else {
-                    $role = '';
+                    $role = 'user';
                     $token = $user->createToken($user->email . '_AuthTkn', [''])->plainTextToken;
                 }
 
@@ -78,7 +75,7 @@ class RegisterController extends Controller
                     'status' => 200,
                     'username' => $user->name,
                     'token' => $token,
-                    'message' => 'Logged in!',
+                    'message' => 'Uspešno ste se ulogovali!',
                     'role' => $role
                 ]);
             }
@@ -91,7 +88,7 @@ class RegisterController extends Controller
         auth()->user()->tokens()->delete();
         return response()->json([
             'status' => 200,
-            'message' => 'Logged out!'
+            'message' => 'Uspešan logout!'
         ]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\KorpaController;
+use App\Http\Controllers\API\NarudzbineController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
 use Illuminate\Http\Request;
@@ -19,17 +21,23 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::get('view-products', [ProductController::class, 'getAll']);
-Route::get('search/{key}', [ProductController::class, 'search']);
+Route::get('get_products_admin', [ProductController::class, 'getAllAdminView']);
+Route::get('search/{kriterijum}/{key}', [ProductController::class, 'search']);
+Route::post('korpa_dodaj', [KorpaController::class, 'dodaj']);
+Route::get('korpa', [KorpaController::class, 'getKorpa']);
+Route::delete('obrisi_item/{id}', [KorpaController::class, 'obrisi']);
+Route::post('naruci', [NarudzbineController::class, 'naruci']);
+Route::post('velicine-za-boju', [ProductController::class, 'velicineZaBoju']);
 
 Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'Authenticated', 'status' => 200], 200);
     });
 
-    Route::post('add-product', [ProductController::class, 'add']);
+    Route::post('addproduct', [ProductController::class, 'add']);
     Route::get('edit-product/{id}', [ProductController::class, 'edit']);
     Route::post('update-product/{id}', [ProductController::class, 'update']);
-    Route::delete('delete-product/{id}', [ProductController::class, 'delete']);
+    Route::delete('deleteproduct/{id}', [ProductController::class, 'delete']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
